@@ -389,6 +389,14 @@ pub trait RpcApi: Sized {
         )?)
     }
 
+    fn rescan_blockchain(
+        &self,
+        start_from: Option<usize>,
+    ) -> Result<()> {
+        let args = [into_json(start_from.unwrap_or(0))?];
+        self.call("rescanblockchain", &args)
+    }
+
     fn get_received_by_address(&self, address: &Address, minconf: Option<u32>) -> Result<Amount> {
         let mut args = [address.to_string().into(), opt_into_json(minconf)?];
         Ok(Amount::from_btc(
@@ -612,7 +620,7 @@ pub trait RpcApi: Sized {
         self.call("getdescriptorinfo", &[desc.to_string().into()])
     }
 
-    fn combine_psbt(&self, psbts: &[&str]) -> Result<String> {
+    fn combine_psbt(&self, psbts: &Vec<String>) -> Result<String> {
         self.call("combinepsbt", &[into_json(psbts)?])
     }
 
