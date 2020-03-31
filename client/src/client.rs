@@ -924,7 +924,7 @@ pub trait RpcApi: Sized {
         &self,
         start_from: Option<usize>,
         stop_height: Option<usize>,
-    ) -> Result<()> {
+    ) -> Result<serde_json::Value> {
         let mut args = [opt_into_json(start_from)?, opt_into_json(stop_height)?];
         self.call("rescanblockchain", handle_defaults(&mut args, &[0.into(), null()]))
     }
